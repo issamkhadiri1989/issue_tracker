@@ -1,0 +1,138 @@
+{% extends 'layout.html.twig' %}
+{% block content %}
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ url('app.issues.all') }}" class="text-decoration-none">Dashboard</a>
+            </li>
+            <li class="breadcrumb-item active" aria-current="page">Issue #{{ issue.id }}</li>
+        </ol>
+    </nav>
+    <div class="row g-4">
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-body p-4">
+                    <div class="d-flex flex-wrap justify-content-between align-items-center mb-3">
+                        <div class="d-flex align-items-center gap-2 mb-2 mb-sm-0">
+                            <span
+                                class="badge text-bg-secondary-subtle text-primary border border-primary-subtle px-3 py-2">
+                                {{ issue.category.name }}
+                            </span>
+                            <span
+                                class="badge rounded-pill bg-success-subtle text-success border border-success-subtle px-3 py-2">
+                  <i class="bi bi-check-circle-fill me-1"></i> {{ issue.status.humanify() }}
+                </span>
+                        </div>
+                        <div class="text-muted small">
+                            <i class="bi bi-clock me-1"></i> Last updated 2 days ago
+                        </div>
+                    </div>
+
+                    <h1 class="h2 fw-bold text-dark mb-3">
+                        {{ issue.title | upper }}
+                    </h1>
+
+                    <div class="d-flex align-items-center text-secondary small mb-4">
+                        <div class="me-3">
+                            <i class="bi bi-person-circle me-1"></i> Reported by <span class="fw-semibold text-dark">
+                                {{ issue.reporter?.fullName }}
+                            </span>
+                        </div>
+                        <div>
+                            <i class="bi bi-calendar3 me-1"></i> {{ issue.createdAt | date('M, d Y') }}
+                        </div>
+                    </div>
+
+                    <hr class="my-4 opacity-25">
+
+                    <h5 class="fw-bold mb-3">Description</h5>
+                    <div class="issue-content lh-lg text-secondary">
+                        {{ issue.description | nl2br }}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-body p-4">
+                    <h5 class="fw-bold mb-4">Attributes</h5>
+                    {% if issue.assignee is not null %}
+                        <div class="mb-4">
+                            <label class="text-uppercase small fw-bold text-muted d-block mb-2">Assigned To :</label>
+                            <div class="d-flex align-items-center">
+                                <div>
+                                    <div class="fw-bold leading-tight">
+                                        {{ issue.assignee.fullName }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% else %}
+                        <div class="mb-4">
+                            <label class="text-uppercase small fw-bold text-muted d-block mb-2">Assigned To :</label>
+                            <div class="d-flex align-items-center">
+                                <div>
+                                    <div class="fw-bold leading-tight">Not assigned</div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+                    <div class="mb-4">
+                        <label class="text-uppercase small fw-bold text-muted d-block mb-2">Severity :</label>
+                        {{ issue.severity | severity | raw }}
+                    </div>
+
+                    <div class="row g-3 mb-2">
+                        <div class="col-6">
+                            <label class="text-uppercase small fw-bold text-muted d-block mb-1">Created</label>
+                            <div class="text-dark small fw-medium">
+                                {{ issue.createdAt | date('M, d Y') }}
+                            </div>
+                        </div>
+                        {% if issue.updatedAt is not null %}
+                            <div class="col-6">
+                                <label class="text-uppercase small fw-bold text-muted d-block mb-1">Updated</label>
+                                <div class="text-dark small fw-medium">
+                                    {{ issue.updatedAt | date('M, d Y') }}
+                                </div>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% if is_granted(role: 'CAN_EDIT_ISSUE', object: issue) or is_granted(role: 'CAN_DELETE_ISSUE', object: issue) %}
+                <div class="card border-0 shadow-sm bg-white">
+                    <div class="card-body p-4">
+                        <h5 class="fw-bold mb-3">Actions</h5>
+                        <div class="d-grid gap-2">
+                            {% if is_granted(role: 'CAN_EDIT_ISSUE', object: issue) %}
+                                <a href="{{ url('app.issues.edit', {id: issue.id}) }}"
+                                   class="btn btn-outline-info d-flex align-items-center justify-content-center py-2 fw-semibold">
+                                    <i class="fa-solid fa-pen-to-square"></i> Edit Issue
+                                </a>
+                            {% endif %}
+
+                            {% if is_granted(role: 'CAN_DELETE_ISSUE', object: issue) %}
+                                <a href="{{ url('app.issues.delete', {id: issue.id}) }}"
+                                   class="btn btn-outline-danger d-flex align-items-center justify-content-center py-2 fw-semibold"
+                                   title="Delete">
+                                    <i class="fa-solid fa-trash"></i> Delete this issue
+                                </a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+{% endblock content %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('styles/details.css') }}">
+{% endblock stylesheets %}
+
+{% block _change_issue_status_status_row %}
+    {{ form_label(form, "Status :", {"attr_label": {"class": "form-label"}}) }}
+    {{ form_widget(form, {"attr": {"class": "form-select", "aria-required": "true"}}) }}
+    {{ form_errors(form) }}
+{% endblock  _change_issue_status_status_row %}

@@ -1,0 +1,46 @@
+{% extends 'layout.html.twig' %}
+{% block content %}
+    <div class="login-card">
+        <h1>Ticketing System</h1>
+        <p class="subtitle">Sign in to your account</p>
+        {% if last_error %}
+            <div class="alert alert-danger">
+                {{ last_error.messageKey | trans(last_error.messageData, 'security') }}
+            </div>
+        {% endif %}
+        <form method="post">
+            <div class="mb-3">
+                <label for="email" class="form-label">Email address</label>
+                <input type="email"
+                    class="form-control"
+                    id="email"
+                    placeholder="Enter your email"
+                    required
+                    name="_username"
+                />
+            </div>
+            <div class="mb-3">
+                <label for="password" class="form-label">Password</label>
+                <input type="password"
+                    class="form-control"
+                    id="password"
+                    placeholder="Enter your password"
+                    required
+                    name="_password"
+                />
+            </div>
+            <input type="hidden" value="{{ csrf_token('_authenticate_') }}" name="_csrf_token"/>
+            <button type="submit" class="btn btn-primary w-100">
+                <i class="fa-solid fa-right-to-bracket"></i> Sign In
+            </button>
+        </form>
+        <pre class="mt-5">
+            - administrator : admin@issue-tracker.com / 123123
+            - user 1 : user01@issue-tracker.com / 123123
+            - user 2 : user02@issue-tracker.com / 123123
+        </pre>
+    </div>
+{% endblock content %}
+{% block styleshseets %}
+    <link rel="stylesheet" href="{{ asset('styles/login.css') }}"/>
+{% endblock  styleshseets %}

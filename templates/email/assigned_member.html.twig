@@ -1,0 +1,27 @@
+<p>Hello {{ user_name }},</p>
+
+<p>
+    An issue ticket has been assigned to you.
+    Please review the details and take the necessary actions:
+    <br/>
+    <br/>
+    Ticket ID: #{{ issue_id }}
+    <br/>
+    <br/>
+    Title: {{ issue_title }}
+    <br/>
+    <br/>
+    Priority: {{ severity }}
+    <br/>
+    <br/>
+    {% if url is defined and url is not same as(null) %}
+        You can access the ticket in the system here: {{ url }}.
+        <br/>
+        <br/>
+    {% endif %}
+    Thank you for your attention and prompt response.
+<p>
+<p>
+    Best regards,
+    [Your Name / Team Name]
+</p>

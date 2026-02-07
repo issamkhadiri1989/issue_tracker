@@ -1,0 +1,111 @@
+{% extends 'layout.html.twig' %}
+{% block content %}
+    <div class="">
+        <a href="{{ url('app.issues.add') }}"
+           class="btn text-bg-primary-subtle d-inline-flex align-items-center shadow-sm px-4">
+            <i class="fa-solid fa-plus"></i> Create New Issue
+        </a>
+    </div>
+    <div class="card main-card mt-5">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead>
+                <tr>
+                    <th scope="col" class="ps-4 py-3">ID</th>
+                    <th scope="col" class="py-3 text-truncate" style="max-width: 400px">Title</th>
+                    <th scope="col" class="py-3">Reporter</th>
+                    <th scope="col" class="py-3">Assigned To</th>
+                    <th scope="col" class="py-3">Status</th>
+                    <th scope="col" class="py-3">Severity</th>
+                    <th scope="col" class="py-3">Date Created</th>
+                    <th scope="col" class="py-3">Date Updated</th>
+                    <th scope="col" class="py-3">Category</th>
+                    <th scope="col" class="text-end pe-4 py-3">Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for issue in pagination %}
+                    <tr>
+                        <td class="ps-4">
+                            <a href="{{ url('app.issues.show', {id: issue.id}) }}">
+                                <span
+                                    class="badge text-bg-primary-subtle text-primary border border-primary-subtle issue-id-badge">
+                                #{{ issue.id }}
+                            </span>
+                            </a>
+                        </td>
+                        <td>
+                            <div class="fw-bold text-dark text-truncate" style="max-width: 400px">
+                                {{ issue.title }}
+                            </div>
+                        </td>
+                        <td>
+                            {% if issue.reporter == app.user %}
+                                me
+                            {% else %}
+                                {{ issue.reporter?.fullName }}
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if issue.assignee is not null %}
+                                <span class="text-secondary small fw-medium">
+                                    {{ issue.assignee.fullName }}
+                                </span>
+                            {% else %}
+                                <span class="text-secondary small fw-medium">
+                                Unassigned
+                            </span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <span class="badge badge-secondary text-black">{{ issue.status.humanify() }}</span>
+                        </td>
+                        <td>
+                            {{ issue.severity | severity | raw }}
+                        </td>
+                        <td>
+                            {{ issue.createdAt | date }}
+                        </td>
+                        <td>
+                            {% if issue.updatedAt is not null %}
+                                {{ issue.updatedAt | date }}
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if issue.category is not null %}
+                                <span
+                                    class="badge badge-pill badge-primary issue-category text-bg-danger-subtle text-danger border border-danger-subtle">
+                                {{ issue.category.name }}
+                            </span>
+                            {% endif %}
+                        </td>
+                        <td class="text-end pe-4">
+                            <div class="btn-group btn-action-group shadow-sm" role="group">
+                                {% if is_granted(role: 'CAN_EDIT_ISSUE', object: issue) %}
+                                    <a href="{{ url('app.issues.edit', {id: issue.id}) }}"
+                                       class="btn btn-sm btn-outline-info" title="Edit">
+                                        <i class="fa-solid fa-pen-to-square"></i>
+                                    </a>
+                                {% endif %}
+                                {% if is_granted(role: 'CAN_DELETE_ISSUE', object: issue) %}
+                                    <a href="{{ url('app.issues.delete', {id: issue.id}) }}"
+                                       class="btn btn-sm btn-outline-danger" title="Delete">
+                                        <i class="fa-solid fa-trash"></i>
+                                    </a>
+                                {% endif %}
+                            </div>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="card-footer bg-white py-3 border-top-0">
+            <div class="d-flex justify-content-between align-items-center text-secondary small">
+                <span>Showing  {{ pagination.getTotalItemCount }} entries</span>
+                {{ knp_pagination_render(pagination) }}
+
+            </div>
+        </div>
+    </div>
+{% endblock content %}

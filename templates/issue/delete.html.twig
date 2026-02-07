@@ -1,0 +1,26 @@
+{% extends 'layout.html.twig' %}
+{% block content %}
+    <div class="row justify-content-center">
+        <div class="col-12 col-md-6 col-lg-5">
+            <div class="card p-4 p-md-5">
+                <div class="mb-4">
+                    <h1 class="h3 fw-bold mb-3">Confirm Deletion</h1>
+                    <p class="text-secondary mb-0">
+                        Are you sure you want to remove the issue <strong>#{{ issue.id }}</strong>? This action cannot
+                        be undone and the data will be permanently deleted from our records.
+                    </p>
+                </div>
+
+                <form method="POST" class="d-grid gap-2">
+                    <input type="hidden" value="{{ csrf_token('__delete_' ~ issue.id) }}" name="_delete_token"/>
+                    <button type="submit" class="btn btn-danger btn-sm ">
+                        Yes, Delete Entry
+                    </button>
+                    <a href="javascript:history.back();" class="btn btn-light btn-sm  ">
+                        Cancel and Go Back
+                    </a>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock content %}

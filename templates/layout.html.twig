@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+    {{ include('partials/_notifications.html.twig') }}
+    {% block content %}{% endblock content %}
+    <footer role="contentinfo" class="py-5 text-center text-secondary">
+        <div class="container">
+            <p class="mb-0 small">&copy; 2026 Issue Management. All rights reserved.</p>
+            <p class="small">Made with ❤️</p>
+        </div>
+    </footer>
+{% endblock body %}

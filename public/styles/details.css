@@ -1,0 +1,89 @@
+/* details.css */
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  color: #2d3748;
+}
+
+.breadcrumb-item + .breadcrumb-item::before {
+  content: "→";
+  color: #cbd5e0;
+}
+
+.avatar-circle {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.85rem;
+}
+
+/* Timeline Styling */
+.timeline {
+  position: relative;
+  padding-left: 1.5rem;
+}
+
+.timeline::before {
+  content: "";
+  position: absolute;
+  left: 0.5rem;
+  top: 0.5rem;
+  bottom: 0;
+  width: 2px;
+  background-color: #e2e8f0;
+}
+
+.timeline-item {
+  position: relative;
+}
+
+.timeline-marker {
+  position: absolute;
+  left: -1.45rem;
+  top: 0.4rem;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 3px solid #fff;
+  z-index: 1;
+}
+
+.timeline-content {
+  padding-bottom: 2rem;
+}
+
+.timeline-item:last-child .timeline-content {
+  padding-bottom: 0;
+}
+
+/* Typography tweaks */
+.leading-tight {
+  line-height: 1.25;
+}
+
+.italic {
+  font-style: italic;
+}
+
+/* Custom colors matching Bootstrap sub-variations */
+.bg-success-subtle {
+  background-color: #f0fff4 !important;
+}
+
+.bg-info-subtle {
+  background-color: #e6fffa !important;
+}
+
+.text-bg-primary-subtle {
+  background-color: #ebf8ff !important;
+  color: #3182ce !important;
+}
+
+/* Accessibility and Hover States */
+.btn-primary:hover {
+  background-color: #2b6cb0;
+  border-color: #2b6cb0;
+}

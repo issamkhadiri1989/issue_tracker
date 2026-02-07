@@ -1,0 +1,41 @@
+{% if pageCount > 1 %}
+    <nav aria-label="Table navigation">
+        <ul class="pagination pagination-sm mb-0">
+            {% if first is defined and current != first %}
+                <li class="page-item">
+                    <a class="page-link" href="{{ path(route, knp_pagination_query(query, first, options)) }}">First</a>
+                </li>
+            {% endif %}
+            {% if previous is defined %}
+                <li class="page-item">
+                    <a class="page-link" href="{{ path(route, knp_pagination_query(query, previous, options)) }}">Previous</a>
+                </li>
+            {% endif %}
+
+            {% for page in pagesInRange %}
+                {% if page != current %}
+                    <li class="page-item">
+                        <a class="page-link"
+                           href="{{ path(route, knp_pagination_query(query, page, options)) }}">{{ page }}</a>
+                    </li>
+                {% else %}
+                    <li class="page-item active"><a class="page-link" href="javascript:void();">{{ page }}</a></li>
+                {% endif %}
+            {% endfor %}
+
+            {% if next is defined %}
+                <li class="page-item">
+                    <a class="page-link" href="{{ path(route, knp_pagination_query(query, next, options)) }}">Next</a>
+                </li>
+            {% endif %}
+
+            {% if last is defined and current != last %}
+                <li class="page-item">
+                    <a class="page-link"href="{{ path(route, knp_pagination_query(query, last, options)) }}">Last</a>
+                </li>
+            {% endif %}
+        </ul>
+    </nav>
+{% endif %}
+
+

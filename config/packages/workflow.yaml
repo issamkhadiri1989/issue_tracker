@@ -1,0 +1,51 @@
+framework:
+    workflows:
+        issue:
+            type: 'state_machine'
+            marking_store:
+                type: 'method'
+                property: 'status'
+            supports:
+                - App\Entity\Issue
+            initial_marking: !php/enum App\Enum\IssueStatusEnum::BACKLOG
+            places:
+                - backlog
+                - opened
+                - closed
+                - wip
+                - review
+                - test
+                - done
+                - undone
+                - blocked
+            transitions:
+                open_issue:
+                    from: !php/enum App\Enum\IssueStatusEnum::BACKLOG
+                    to: !php/enum App\Enum\IssueStatusEnum::OPENED
+                close_issue:
+                    from: !php/enum App\Enum\IssueStatusEnum::OPENED
+                    to: !php/enum App\Enum\IssueStatusEnum::CLOSED
+                start_working:
+                    from: !php/enum App\Enum\IssueStatusEnum::OPENED
+                    to: !php/enum App\Enum\IssueStatusEnum::WIP
+                code_review:
+                    from: !php/enum App\Enum\IssueStatusEnum::WIP
+                    to: !php/enum App\Enum\IssueStatusEnum::REVIEWED
+                start_testing:
+                    from: !php/enum App\Enum\IssueStatusEnum::REVIEWED
+                    to: !php/enum App\Enum\IssueStatusEnum::TESTED
+                done:
+                    from: !php/enum App\Enum\IssueStatusEnum::TESTED
+                    to: !php/enum App\Enum\IssueStatusEnum::DONE
+                test_ko_need_rework:
+                    from: !php/enum App\Enum\IssueStatusEnum::TESTED
+                    to: !php/enum App\Enum\IssueStatusEnum::UNDONE
+                rework_after_test:
+                    from: !php/enum App\Enum\IssueStatusEnum::UNDONE
+                    to: !php/enum App\Enum\IssueStatusEnum::WIP
+                need_info_issue_blocked:
+                    from: !php/enum App\Enum\IssueStatusEnum::WIP
+                    to: !php/enum App\Enum\IssueStatusEnum::BLOCKED
+                unblock_issue:
+                    from: !php/enum App\Enum\IssueStatusEnum::BLOCKED
+                    to: !php/enum App\Enum\IssueStatusEnum::OPENED

@@ -1,0 +1,121 @@
+{% block create_issue_row %}
+    <div class="row">
+        <div class="col-md-12 mb-4">
+            {{ form_row(form.title) }}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6 mb-4">
+            {{ form_row(form.assignee) }}
+        </div>
+        {% if form.status is defined %}
+            <div class="col-md-6 mb-4">
+                {{ form_row(form.status) }}
+            </div>
+        {% endif %}
+    </div>
+
+    <div class="row">
+        <div class="col-md-6 mb-4">
+            {{ form_row(form.category) }}
+        </div>
+        <div class="col-md-6 mb-4">
+            {{ form_row(form.severity) }}
+        </div>
+    </div>
+    <div class="row">
+        <div class="mb-4">
+            {{ form_row(form.description) }}
+        </div>
+    </div>
+
+{% endblock create_issue_row %}
+
+{% block issue_title_row %}
+    {{ form_label(form, "Issue Title:", {"attr_label": {"class": "form-label"}}) }}
+    {{ form_widget(form, {
+        "attr": {
+            "class": "form-control",
+            "aria-required": "true",
+            "aria-describedby": "title-help"
+        }
+    }) }}
+    {{ form_help(form, {"attr": {"class": "form-text"}}) }}
+    {{ form_errors(form) }}
+{% endblock issue_title_row %}
+
+{% block form_help %}
+    {% if help is not null %}
+        <div id="{{ id }}" {{ block("widget_attributes") }}>{{ help }}</div>
+    {% endif %}
+{% endblock form_help %}
+
+{% block issue_severity_row %}
+    <fieldset>
+        {{ form_label(form, "Priority Level", {
+            "attr_label": {
+                "class": "form-label fs-6",
+            }
+        }) }}
+
+        {% for choice in form %}
+            <div class="form-check">
+                {{ form_widget(choice, {
+                    "attr": {
+                        "class": "form-check-input"
+                    }
+                }) }}
+                {{ form_label(choice, "", {
+                    "attr_label": {
+                        "class": "form-check-label",
+                    }
+                }) }}
+            </div>
+        {% endfor %}
+    </fieldset>
+{% endblock issue_severity_row %}
+
+{% block issue_severity_label %}
+    <legend {{ block('widget_attributes') }}>
+        {{ label }}
+    </legend>
+{% endblock issue_severity_label %}
+
+{% block issue_description_row %}
+    {{ form_label(form, "Detailed Description:", {"attr": {"class": "form-label"}}) }}
+    {{ form_widget(form, {
+        attr: {
+            "class": "form-control",
+            "rows": 5,
+            "aria-required": "true"
+        }
+    }) }}
+    {{ form_help(form, {"attr": {"class": "form-text"}}) }}
+{% endblock issue_description_row %}
+
+{% block issue_category_row %}
+    {{ form_label(form, "Category:", {"attr_label": {"class": "form-label"}}) }}
+    {{ form_widget(form, {"attr": {"class": "form-select", "aria-required": "true"}}) }}
+    {{ form_errors(form) }}
+{% endblock issue_category_row %}
+
+{% block issue_assignee_row %}
+    {{ form_label(form, "Assign to:", {"attr_label": {"class": "form-label"}}) }}
+    {{ form_widget(form, {"attr": {"class": "form-select", "aria-required": "true"}}) }}
+{% endblock  issue_assignee_row %}
+
+{% block form_errors %}
+    {% if errors | length > 0 %}
+        <ul style="list-style: none; color: red">
+            {% for error in errors %}
+                <li><i class="fa-solid fa-circle-info"></i> {{ error.message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+{% endblock form_errors %}
+
+{% block issue_status_row %}
+    {{ form_label(form, "Status :", {"attr_label": {"class": "form-label"}}) }}
+    {{ form_widget(form, {"attr": {"class": "form-select", "aria-required": "true"}}) }}
+    {{ form_errors(form) }}
+{% endblock issue_status_row %}
