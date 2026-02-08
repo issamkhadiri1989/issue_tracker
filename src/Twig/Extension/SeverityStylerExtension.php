@@ -13,7 +13,7 @@ class SeverityStylerExtension extends AbstractExtension
     public function getFilters(): array
     {
         return [
-            new TwigFilter('severity', [$this, 'severityFilter']),
+            new TwigFilter('severity', $this->severityFilter(...)),
         ];
     }
 

@@ -35,6 +35,8 @@ abstract class AbstractIssueCommand implements IssueCommandInterface
             }
         } catch (\Throwable $exception) {
             $this->logger->error($exception->getMessage());
+
+            throw $exception;
         }
     }
 

@@ -6,14 +6,14 @@ namespace App\Security\Voter;
 
 use App\Entity\Issue;
 use App\Entity\Member;
-use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+use Symfony\Component\Security\Core\Authorization\AccessDecisionManagerInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Vote;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 
 final class IssueVoter extends Voter
 {
-    public function __construct(private Security $security)
+    public function __construct(private AccessDecisionManagerInterface $accessDecisionManager)
     {
     }
 
@@ -34,27 +34,27 @@ final class IssueVoter extends Voter
         $issue = $subject;
 
         return match ($attribute) {
-            'CAN_DELETE_ISSUE' => $this->canDeleteIssue(member: $currentUser, issue: $issue),
-            'CAN_EDIT_ISSUE' => $this->canEditIssue(member: $currentUser, issue: $issue),
+            'CAN_DELETE_ISSUE' => $this->canDeleteIssue(member: $currentUser, issue: $issue, token: $token),
+            'CAN_EDIT_ISSUE' => $this->canEditIssue(member: $currentUser, issue: $issue, token: $token),
             default => false,
         };
     }
 
-    private function canDeleteIssue(Member $member, Issue $issue): bool
+    private function canDeleteIssue(Member $member, Issue $issue, TokenInterface $token): bool
     {
         // make sure that only the admin and the reporter can delete the issue
-        if ($this->security->isGranted('ROLE_ADMIN')) {
+        if ($this->accessDecisionManager->decide($token, ['ROLE_ADMIN'])) {
             return true;
         }
 
         return $issue->getReporter() === $member;
     }
 
-    private function canEditIssue(Member $member, Issue $issue): bool
+    private function canEditIssue(Member $member, Issue $issue, TokenInterface $token): bool
     {
         // make sure that the issue can be edited by everyone (to change the status or make some updates)
         // admin can do anything
-        if ($this->security->isGranted('ROLE_ADMIN')) {
+        if ($this->accessDecisionManager->decide($token, ['ROLE_ADMIN'])) {
             return true;
         }
 

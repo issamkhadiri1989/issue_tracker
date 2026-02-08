@@ -21,3 +21,21 @@ services:
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
+
+when@test:
+    services:
+        _defaults:
+            autowire: true
+            autoconfigure: true
+        App\Issue\Command\Handler\IssueCommandHandler:
+            public: true
+        App\Issue\Command\CreateIssueCommand:
+            public: true
+        App\Issue\Command\UpdateIssueCommand:
+            public: true
+        App\Issue\Command\RemoveIssueCommand:
+         public: true
+        App\Issue\Requester\DefaultIssuesRequester:
+            public: true
+        App\Repository\IssueRepository:
+            public: true

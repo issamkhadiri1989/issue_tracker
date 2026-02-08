@@ -25,6 +25,7 @@ class Issue
     private ?string $title = null;
 
     #[ORM\Column(type: Types::TEXT)]
+    #[Assert\NotBlank]
     private ?string $description = null;
 
     #[ORM\Column]
@@ -34,9 +35,11 @@ class Issue
     private ?\DateTime $updatedAt = null;
 
     #[ORM\Column(enumType: SeverityEnum::class, options: ['default' => SeverityEnum::LOW])]
+    #[Assert\NotBlank]
     private ?SeverityEnum $severity = null;
 
     #[ORM\ManyToOne(inversedBy: 'issues')]
+    #[Assert\NotBlank]
     private ?Category $category = null;
 
     #[ORM\ManyToOne(inversedBy: 'issues')]
@@ -47,6 +50,7 @@ class Issue
     private ?Member $assignee = null;
 
     #[ORM\Column(enumType: IssueStatusEnum::class, options: ['default' => IssueStatusEnum::BACKLOG])]
+    #[Assert\NotBlank]
     private ?IssueStatusEnum $status = null;
 
     private string $currentStatus;
